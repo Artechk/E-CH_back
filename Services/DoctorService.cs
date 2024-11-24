@@ -33,6 +33,5 @@ namespace E_CH_back.Services
         {
             return await _doctors.Find(_ => true).ToListAsync();
         }
-
     }
 }

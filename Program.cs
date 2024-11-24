@@ -11,11 +11,11 @@ namespace E_CH_back
 
             builder.Services.AddSingleton<MongoDbContext>();
             builder.Services.AddSingleton<UserService>();
-
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<AppointmentService>();
+            builder.Services.AddScoped<PaymentService>();
             builder.Services.AddSingleton<DoctorService>();
 
 
@@ -23,7 +23,7 @@ namespace E_CH_back
 
             app.UseSwagger();
             app.UseSwaggerUI();
-
+            app.UseAuthorization();
             app.MapControllers();
 
             app.Run();

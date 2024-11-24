@@ -25,27 +25,27 @@ namespace E_CH_back.Controllers
             if (doctor == null)
                 return NotFound(new { message = "Doctor not found" });
 
-            // Проверяем доступное время
-            var timeSlot = doctor.AvailableTimes.FirstOrDefault(t => t.StartTime <= request.AppointmentTime && t.EndTime > request.AppointmentTime);
+            // Проверяем, есть ли свободный слот на указанную дату и время
+            var appointmentTime = request.AppointmentTime;
+            var timeSlot = doctor.AppointmentTimes.FirstOrDefault(t => t == appointmentTime); // Сравниваем точную дату и время
             if (timeSlot == null)
                 return BadRequest(new { message = "The selected time is not available" });
 
             // Убираем слот из доступных
-            doctor.AvailableTimes.Remove(timeSlot);
+            doctor.AppointmentTimes.Remove(timeSlot);
             await _doctorService.UpdateDoctorAsync(doctor);
 
-            // Создаём запись
+            // Создаём запись с полной датой и временем
             var appointment = new Appointment
             {
                 UserId = request.UserId,
                 DoctorId = request.DoctorId,
-                AppointmentTime = request.AppointmentTime,
+                AppointmentTime = request.AppointmentTime, // Полный DateTime (с датой и временем)
                 Workplace = doctor.Workplace
             };
             await _appointmentService.AddAppointmentAsync(appointment);
 
             return Ok(new { message = "Appointment successfully booked" });
         }
-
     }
 }

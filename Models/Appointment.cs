@@ -25,6 +25,6 @@ namespace E_CH_back.Models
     {
         public string UserId { get; set; }
         public string DoctorId { get; set; }
-        public DateTime AppointmentTime { get; set; }
+        public DateTime AppointmentTime { get; set; } // Полный DateTime (с датой и временем)
     }
 }

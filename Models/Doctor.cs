@@ -9,16 +9,13 @@ namespace E_CH_back.Models
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonIgnoreIfDefault]
         public string? Id { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string MiddleName {  get; set; }
+        public string MiddleName { get; set; }
         public string Workplace { get; set; }
-        public List<TimeSlot> AvailableTimes { get; set; } = new();
-    }
 
-    public class TimeSlot
-    {
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        // Список доступных временных слотов с полными датами (DateTime)
+        public List<DateTime> AppointmentTimes { get; set; }
     }
 }

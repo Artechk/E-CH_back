@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using E_CH_back.Models;
 using E_CH_back.Services;
+using MongoDB.Bson;
 
 namespace E_CH_back.Controllers
 {
@@ -34,6 +35,7 @@ namespace E_CH_back.Controllers
             return Ok(new { exists });
         }
 
+
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User user)
         {
@@ -45,5 +47,68 @@ namespace E_CH_back.Controllers
 
             return Ok(new { message = "Authenticated successfully" });
         }
+
+        [HttpPost("{userId}/addresses")]
+        public async Task<IActionResult> AddAddress(string userId, [FromBody] Address address)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            address.Id = ObjectId.GenerateNewId().ToString(); // Генерация ID для адреса
+            user.Addresses.Add(address);
+            await _userService.UpdateUserAsync(user);
+
+            return Ok(new { message = "Address added successfully", addressId = address.Id });
+        }
+
+        [HttpGet("{userId}/addresses")]
+        public async Task<IActionResult> GetAddresses(string userId)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(user.Addresses);
+        }
+
+        [HttpPut("{userId}/addresses/{addressId}")]
+        public async Task<IActionResult> UpdateAddress(string userId, string addressId, [FromBody] Address updatedAddress)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            var address = user.Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address == null)
+                return NotFound(new { message = "Address not found" });
+
+            address.Street = updatedAddress.Street;
+            address.City = updatedAddress.City;
+            address.State = updatedAddress.State;
+            address.ZipCode = updatedAddress.ZipCode;
+
+            await _userService.UpdateUserAsync(user);
+
+            return Ok(new { message = "Address updated successfully" });
+        }
+
+        [HttpDelete("{userId}/addresses/{addressId}")]
+        public async Task<IActionResult> DeleteAddress(string userId, string addressId)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            var address = user.Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address == null)
+                return NotFound(new { message = "Address not found" });
+
+            user.Addresses.Remove(address);
+            await _userService.UpdateUserAsync(user);
+
+            return Ok(new { message = "Address deleted successfully" });
+        }
+
     }
 }

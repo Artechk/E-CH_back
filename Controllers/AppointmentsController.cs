@@ -18,15 +18,15 @@ namespace E_CH_back.Controllers
         }
 
         [HttpPost("book")]
-        public async Task<IActionResult> BookAppointment(string userId, string doctorId, DateTime appointmentTime)
+        public async Task<IActionResult> BookAppointment([FromBody] BookAppointmentRequest request)
         {
             // Проверяем врача
-            var doctor = await _doctorService.GetDoctorByIdAsync(doctorId);
+            var doctor = await _doctorService.GetDoctorByIdAsync(request.DoctorId);
             if (doctor == null)
                 return NotFound(new { message = "Doctor not found" });
 
             // Проверяем доступное время
-            var timeSlot = doctor.AvailableTimes.FirstOrDefault(t => t.StartTime <= appointmentTime && t.EndTime > appointmentTime);
+            var timeSlot = doctor.AvailableTimes.FirstOrDefault(t => t.StartTime <= request.AppointmentTime && t.EndTime > request.AppointmentTime);
             if (timeSlot == null)
                 return BadRequest(new { message = "The selected time is not available" });
 
@@ -37,14 +37,15 @@ namespace E_CH_back.Controllers
             // Создаём запись
             var appointment = new Appointment
             {
-                UserId = userId,
-                DoctorId = doctorId,
-                AppointmentTime = appointmentTime,
+                UserId = request.UserId,
+                DoctorId = request.DoctorId,
+                AppointmentTime = request.AppointmentTime,
                 Workplace = doctor.Workplace
             };
             await _appointmentService.AddAppointmentAsync(appointment);
 
             return Ok(new { message = "Appointment successfully booked" });
         }
+
     }
 }

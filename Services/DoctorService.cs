@@ -28,5 +28,11 @@ namespace E_CH_back.Services
             var filter = Builders<Doctor>.Filter.Eq(d => d.Id, doctor.Id);
             await _doctors.ReplaceOneAsync(filter, doctor);
         }
+
+        public async Task<List<Doctor>> GetAllDoctorsAsync()
+        {
+            return await _doctors.Find(_ => true).ToListAsync();
+        }
+
     }
 }

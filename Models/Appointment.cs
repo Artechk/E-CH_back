@@ -20,4 +20,11 @@ namespace E_CH_back.Models
 
         public string Workplace { get; set; } // Место работы врача
     }
+
+    public class BookAppointmentRequest
+    {
+        public string UserId { get; set; }
+        public string DoctorId { get; set; }
+        public DateTime AppointmentTime { get; set; }
+    }
 }

@@ -21,5 +21,13 @@ namespace E_CH_back.Controllers
             await _doctorService.AddDoctor(doctor);
             return Ok(new { message = "Doctor added successfully", doctorId = doctor.Id });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllDoctors()
+        {
+            var doctors = await _doctorService.GetAllDoctorsAsync();
+            return Ok(doctors);
+        }
+
     }
 }

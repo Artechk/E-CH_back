@@ -37,3 +37,4 @@ C:\Users\Artechk\source\repos\E-CH_back\E-CH_back\obj\Debug\net8.0\refint\E-CH_b
 C:\Users\Artechk\source\repos\E-CH_back\E-CH_back\obj\Debug\net8.0\E-CH_back.pdb
 C:\Users\Artechk\source\repos\E-CH_back\E-CH_back\obj\Debug\net8.0\E-CH_back.genruntimeconfig.cache
 C:\Users\Artechk\source\repos\E-CH_back\E-CH_back\obj\Debug\net8.0\ref\E-CH_back.dll
+C:\Users\Artechk\source\repos\E-CH_back\E-CH_back\obj\Debug\net8.0\E-CH_back.sourcelink.json

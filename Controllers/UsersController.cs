@@ -41,14 +41,17 @@ namespace E_CH_back.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] User user)
         {
-            var isAuthenticated = await _userService.AuthenticateUser(user.Email, user.Password);
-            if (!isAuthenticated)
+            var authenticatedUser = await _userService.AuthenticateUser(user.Email, user.Password);
+            if (authenticatedUser == null)
             {
                 return Unauthorized(new { message = "Invalid email or password" });
             }
 
             return Ok(new { message = "Authenticated successfully" });
         }
+
+
+
 
         [HttpPost("{userId}/addresses")]
         public async Task<IActionResult> AddAddress(string userId, [FromBody] Address address)

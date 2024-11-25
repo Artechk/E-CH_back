@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using E_CH_back.Models;
 using E_CH_back.Data;
+using MongoDB.Bson;
 
 namespace E_CH_back.Services
 {
@@ -33,14 +34,17 @@ namespace E_CH_back.Services
             return user != null;
         }
 
-        public async Task<bool> AuthenticateUser(string email, string password)
+        public async Task<User> AuthenticateUser(string email, string password)
         {
             var user = await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
-            if (user == null) return false;
+            if (user == null || user.Password != password)
+            {
+                return null; // Не найден пользователь или пароль неверный
+            }
 
-            // Используем BCrypt.Net для проверки пароля
-            return BCrypt.Net.BCrypt.Verify(password, user.Password);
+            return user; // Аутентификация успешна
         }
+
 
         public async Task UpdateUserAsync(User user)
         {
@@ -48,14 +52,19 @@ namespace E_CH_back.Services
             await _context.Users.ReplaceOneAsync(filter, user);
         }
 
-        public async Task AddAddressAsync(string userId, Address address)
+        public async Task AddAddress(string userId, Address newAddress)
         {
-            var user = await GetUserByIdAsync(userId);
+            var user = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
             if (user == null) throw new Exception("User not found");
 
-            user.Addresses.Add(address);
-            await UpdateUserAsync(user);
+            // Генерация уникального ID
+            newAddress.Id = ObjectId.GenerateNewId().ToString();
+
+            // Добавляем адрес
+            user.Addresses.Add(newAddress);
+            await _context.Users.ReplaceOneAsync(u => u.Id == userId, user);
         }
+
 
         public async Task UpdateAddressAsync(string userId, string addressId, Address updatedAddress)
         {

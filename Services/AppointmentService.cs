@@ -27,5 +27,16 @@ namespace E_CH_back.Services
         {
             return await _appointments.Find(a => a.DoctorId == doctorId).ToListAsync();
         }
+
+        public async Task<Appointment> GetAppointmentByDoctorAndTimeAsync(string doctorId, DateTime appointmentTime)
+        {
+            return await _appointments.Find(a => a.DoctorId == doctorId && a.AppointmentTime == appointmentTime).FirstOrDefaultAsync();
+        }
+
+        public async Task<DeleteResult> DeleteAppointmentAsync(FilterDefinition<Appointment> filter)
+        {
+            return await _appointments.DeleteOneAsync(filter);
+        }
+
     }
 }

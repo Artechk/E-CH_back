@@ -17,8 +17,6 @@ namespace E_CH_back.Models
         public string DoctorId { get; set; } // ID врача
 
         public DateTime AppointmentTime { get; set; } // Время записи
-
-        public string Workplace { get; set; } // Место работы врача
     }
 
     public class BookAppointmentRequest

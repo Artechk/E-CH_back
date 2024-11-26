@@ -51,7 +51,6 @@ namespace E_CH_back.Controllers
                 UserId = request.UserId,
                 DoctorId = request.DoctorId,
                 AppointmentTime = request.AppointmentTime,
-                Workplace = doctor.Workplace
             };
             await _appointmentService.AddAppointmentAsync(appointment);
 

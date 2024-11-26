@@ -13,7 +13,7 @@ namespace E_CH_back.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
-        public string Workplace { get; set; }
+        public string? Spec { get; set; }
 
         // Список доступных временных слотов с полными датами (DateTime)
         public List<DateTime> AppointmentTimes { get; set; }
